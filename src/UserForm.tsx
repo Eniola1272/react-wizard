@@ -27,9 +27,20 @@ export function UserForm({
         onChange={(e) => updateFields({ firstName: e.target.value })}
       />
       <label>Last Name</label>
-      <input type="text" required value={lastName} onChange={(e) => updateFields({ lastName: e.target.value })}/>
+      <input
+        type="text"
+        required
+        value={lastName}
+        onChange={(e) => updateFields({ lastName: e.target.value })}
+      />
       <label>Age</label>
-      <input min={1} type="number" required value={age} onChange={(e) => updateFields({ age: e.target.value })}/>
+      <input
+        min={1}
+        type="number"
+        required
+        value={age}
+        onChange={(e) => updateFields({ age: e.target.value })}
+      />
     </FormWrapper>
   );
 }
