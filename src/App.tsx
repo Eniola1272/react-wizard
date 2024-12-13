@@ -4,7 +4,7 @@ import { AddressForm } from "./AddressForm";
 import { AccountForm } from "./AccountForm";
 import { UserForm } from "./UserForm"
 import "./style.css"
-import React, { FormEvent, useState, useEffect } from "react";
+import { FormEvent, useState, useEffect } from "react";
 
 type FormData = {
   firstName: string,
@@ -36,6 +36,8 @@ const INITIAL_DATA : FormData = {
 const App = () => {
 
   const [data, setData] = useState(INITIAL_DATA);
+
+  const [isStepValid, setIsStepValid] = useState(false);
   function updateFields(fields: Partial <FormData>) {
     // get preveious data from the last render 
     setData(prev => {
@@ -55,10 +57,44 @@ const App = () => {
       alert("Successful Account Creation")
     }
 
-     // Attach event listener for arrow key navigation
+    function validateStep() {
+      switch (currentStepIndex) {
+        case 0:
+          // Validate UserForm (example validation)
+          setIsStepValid(
+            data.firstName.trim() !== "" &&
+              data.lastName.trim() !== "" &&
+              data.age.trim() !== ""
+          );
+          break;
+        case 1:
+          // Validate AccountForm
+          setIsStepValid(
+            data.email.trim() !== "" && data.password.trim().length >= 6
+          );
+          break;
+        case 2:
+          // Validate AddressForm
+          setIsStepValid(
+            data.street.trim() !== "" &&
+              data.city.trim() !== "" &&
+              data.state.trim() !== "" &&
+              data.zip.trim() !== ""
+          );
+          break;
+        default:
+          setIsStepValid(false);
+      }
+    }
+  
+    useEffect(() => {
+      validateStep();
+    }, [data, currentStepIndex]);
+
+   // Attach Event Listener for Arrow Key Navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight" && !isLastStep) {
+      if (e.key === "ArrowRight" && isStepValid && !isLastStep) {
         next();
       } else if (e.key === "ArrowLeft" && !isFirstStep) {
         back();
@@ -67,11 +103,11 @@ const App = () => {
 
     window.addEventListener("keydown", handleKeyDown);
 
-    // Cleanup listener on unmount
+    // Clean up listener on unmount
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isFirstStep, isLastStep, next, back]);
+  }, [isFirstStep, isLastStep, isStepValid, next, back]);
 
   return (
     <div style={{
@@ -120,7 +156,7 @@ const App = () => {
               Back
             </button>
           )}
-          <button type="submit" >
+          <button type="submit" disabled={!isStepValid} >
             {isLastStep ? "Finish" : "Next"}
           </button>
         </div>
