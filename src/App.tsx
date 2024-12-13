@@ -2,8 +2,7 @@
 import { useMultistepForm } from "./useMultistepForm";
 import { AddressForm } from "./AddressForm";
 import { AccountForm } from "./AccountForm";
-import { UserForm } from "./userForm";
-UserForm
+import { UserForm } from "./UserForm"
 import "./style.css"
 import { FormEvent, useState } from "react";
 
