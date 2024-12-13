@@ -1,10 +1,10 @@
-// import React from "react";
+
 import { useMultistepForm } from "./useMultistepForm";
 import { AddressForm } from "./AddressForm";
 import { AccountForm } from "./AccountForm";
 import { UserForm } from "./UserForm"
 import "./style.css"
-import { FormEvent, useState } from "react";
+import React, { FormEvent, useState, useEffect } from "react";
 
 type FormData = {
   firstName: string,
@@ -31,6 +31,8 @@ const INITIAL_DATA : FormData = {
 }
 
 
+
+
 const App = () => {
 
   const [data, setData] = useState(INITIAL_DATA);
@@ -49,8 +51,27 @@ const App = () => {
 
     function onSubmit(e: FormEvent) {
       e.preventDefault()
-      next()
+      if (!isLastStep) return next()
+      alert("Successful Account Creation")
     }
+
+     // Attach event listener for arrow key navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight" && !isLastStep) {
+        next();
+      } else if (e.key === "ArrowLeft" && !isFirstStep) {
+        back();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup listener on unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isFirstStep, isLastStep, next, back]);
 
   return (
     <div style={{
@@ -70,7 +91,7 @@ const App = () => {
         margin: "1rem",
         borderRadius: ".5rem",
         fontFamily: "Arial",
-        maxWidth:"600px"
+        maxWidth:"max-content"
       }}
     >
       <form onSubmit={onSubmit}>
@@ -93,7 +114,7 @@ const App = () => {
             justifyContent: "flex-end",
           }}
         >
-          {/* {currentStepIndex !== 0 && <button>Back</button>} */}
+          
           {!isFirstStep && (
             <button type="button" onClick={back}>
               Back

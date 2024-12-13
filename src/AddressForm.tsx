@@ -11,7 +11,7 @@ type AddressFormProps = AddressData & {
   updateFields: (fields: Partial<AddressData>) => void;
 };
 
-export function AddressForm({
+export function AddressForm({ 
     street,
     city,
     state,
