@@ -1,3 +1,3 @@
-# React + TypeScript + Vite
+# Multi-step Form using Custom Hook 
 
-## Multi-step Form using Custom Hook 
+## Built with React + TypeScript
